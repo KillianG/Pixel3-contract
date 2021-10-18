@@ -4,10 +4,11 @@ const { createAlchemyWeb3 } = require("@alch/alchemy-web3")
 const web3 = createAlchemyWeb3(API_URL)
 const contract = require("../artifacts/contracts/pixel.sol/PixelNft.json")
 console.log(JSON.stringify(contract.abi))
-const contractAddress = "0x2EA4893c999c831E62a0400F07b1891c06cb052c"
+const contractAddress = "0x2d296D2c6BC4aB08223034a9E4566e3DE4Ebcbcc"
 
 const PUBLIC_KEY = process.env.PUBLIC_KEY
 const PRIVATE_KEY = process.env.PRIVATE_KEY
+const ERWAN_KEY = process.env.ERWAN_KEY
 
 const nftContract = new web3.eth.Contract(contract.abi, contractAddress)
 
@@ -49,4 +50,4 @@ async function mintNFT(tokenURI) {
     })
 }
 
-mintNFT("https://gateway.pinata.cloud/ipfs/QmSz7MbDeXsa9K5pgnWcC7rE666uJfszonGsvzMaBfCDEY")
+mintNFT("https://gateway.pinata.cloud/ipfs/QmYiM8DxGHFgzp5EjXb8oBgrEsEhisZH1ehAZ1QacZQhZX")
