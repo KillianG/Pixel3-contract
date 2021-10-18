@@ -1,0 +1,6 @@
+cache/
+artifacts/
+node_modules/
+.idea
+.env
+package-lock.json
