@@ -29,11 +29,11 @@ contract PixelNFT is ERC721URIStorage, Ownable, Colors {
     function mintNFT(address recipient, string memory tokenURI)
         public returns (uint256)
     {
-        _tokenIds.increment();
 
         uint256 newItemId = _tokenIds.current();
         _mint(recipient, newItemId);
         _setTokenURI(newItemId, tokenURI);
+        _tokenIds.increment();
         totalColors++;
 
         return newItemId;
