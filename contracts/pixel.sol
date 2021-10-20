@@ -3,21 +3,24 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 
 contract Colors {
     mapping (uint256 => string)  colors;
     mapping (uint256 => string)  links;
 }
 
-contract PixelNFT is ERC721URIStorage, Ownable, Colors {
+contract PixelNFT is ERC721Enumerable, Ownable, Colors {
     using Counters for Counters.Counter;
 
     Counters.Counter private _tokenIds;
 
     uint public totalColors;
+    uint public pricePerMint = 0;
     uint public maxAmountOfPixel = 10*10;
 
     constructor() public ERC721("PixelNFT", "PIX") {}
@@ -26,17 +29,33 @@ contract PixelNFT is ERC721URIStorage, Ownable, Colors {
     event linkChanged(string newLink, uint256 tokenId);
 
 
-    function mintNFT(address recipient, string memory tokenURI)
-        public returns (uint256)
+    function mintNFT(address recipient)
+        public payable returns (uint256)
     {
-
+        require(msg.value >= 0 wei, "Not enough BNB sent: check price.");
         uint256 newItemId = _tokenIds.current();
         _mint(recipient, newItemId);
-        _setTokenURI(newItemId, tokenURI);
         _tokenIds.increment();
         totalColors++;
 
         return newItemId;
+    }
+
+    function withdraw(address payable recipient) public onlyOwner {
+        uint256 balance = address(this).balance;
+        recipient.transfer(balance);
+    }
+
+    function tokensOfOwnerBySize(
+        address user
+    ) public view returns (uint256[] memory) {
+        uint256 length = balanceOf(user);
+
+        uint256[] memory values = new uint256[](length);
+        for (uint256 i = 0; i < length; i++) {
+            values[i] = tokenOfOwnerByIndex(user, i);
+        }
+        return (values);
     }
 
     function changeColor(string memory newColor, uint256 tokenId) public {
