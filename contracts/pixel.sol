@@ -14,26 +14,26 @@ contract Colors {
 
 contract PixelNFT is ERC721URIStorage, Ownable, Colors {
     using Counters for Counters.Counter;
+
     Counters.Counter private _tokenIds;
+
     uint public totalColors;
-    uint public maxAmountOfPixel = 2;
+    uint public maxAmountOfPixel = 10*10;
 
     constructor() public ERC721("PixelNFT", "PIX") {}
 
     event colorChanged(uint newColor, uint256 tokenId);
     event linkChanged(string newLink, uint256 tokenId);
 
+
     function mintNFT(address recipient, string memory tokenURI)
-        public onlyOwner
-        returns (uint256)
+        public returns (uint256)
     {
-        require(_tokenIds._value < maxAmountOfPixel, "Error you cannot mint more pixels");
         _tokenIds.increment();
 
         uint256 newItemId = _tokenIds.current();
         _mint(recipient, newItemId);
         _setTokenURI(newItemId, tokenURI);
-        changeLink("https://epitech.eu", newItemId);
         totalColors++;
 
         return newItemId;
@@ -64,7 +64,7 @@ contract PixelNFT is ERC721URIStorage, Ownable, Colors {
 
     function getAllColor() public view returns (uint[] memory) {
         uint[] memory result = new uint[](totalColors);
-        for (uint id = 0; id < totalColors; id++) {
+        for (uint id = 1; id < totalColors; id++) {
             result[id] = getColor(id);
         }
         return result;
@@ -79,23 +79,13 @@ contract PixelNFT is ERC721URIStorage, Ownable, Colors {
         emit linkChanged(newLink, tokenId);
     }
 
-    function changeColorPack(string[] memory newLink, uint256[] memory tokenIds) public {
-        require(newLink.length == tokenIds.length, "Error: list must be the same size");
-        for (uint16 id = 0; id < tokenIds.length; id++) {
-            require(
-                _isApprovedOrOwner(_msgSender(), tokenIds[id]),
-                "ERC721: caller is not owner nor approved");
-            changeLink(newLink[id], tokenIds[id]);
-        }
-    }
-
     function getLink(uint256 tokenId) public view returns (string memory) {
         return links[tokenId];
     }
 
     function getAllLinks() public view returns (string[] memory) {
         string[] memory result = new string[](totalColors);
-        for (uint id = 0; id < totalColors; id++) {
+        for (uint id = 1; id < totalColors; id++) {
             result[id] = getLink(id);
         }
         return result;

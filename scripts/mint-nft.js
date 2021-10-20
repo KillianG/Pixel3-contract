@@ -4,7 +4,7 @@ const { createAlchemyWeb3 } = require("@alch/alchemy-web3")
 const web3 = createAlchemyWeb3(API_URL)
 const contract = require("../artifacts/contracts/pixel.sol/PixelNft.json")
 console.log(JSON.stringify(contract.abi))
-const contractAddress = "0x2d296D2c6BC4aB08223034a9E4566e3DE4Ebcbcc"
+const contractAddress = "0x2e8C55b8E7cD45e82451A02670e1A243A3C3Fc1F"
 
 const PUBLIC_KEY = process.env.PUBLIC_KEY
 const PRIVATE_KEY = process.env.PRIVATE_KEY
