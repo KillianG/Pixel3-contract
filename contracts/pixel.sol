@@ -32,7 +32,7 @@ contract PixelNFT is ERC721Enumerable, Ownable, Colors {
     function mintNFT(address recipient)
         public payable returns (uint256)
     {
-        require(msg.value >= 0 wei, "Not enough BNB sent: check price.");
+        //require(msg.value >= 0 wei, "Not enough BNB sent: check price.");
         uint256 newItemId = _tokenIds.current();
         _mint(recipient, newItemId);
         _tokenIds.increment();
