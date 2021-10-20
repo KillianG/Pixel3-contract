@@ -62,9 +62,9 @@ contract PixelNFT is ERC721URIStorage, Ownable, Colors {
         return colors[tokenId];
     }
 
-    function getAllColor() public view returns (string[] memory) {
+    function getAllColors() public view returns (string[] memory) {
         string[] memory result = new string[](totalColors);
-        for (uint id = 1; id < totalColors; id++) {
+        for (uint id = 0; id < totalColors; id++) {
             result[id] = getColor(id);
         }
         return result;
@@ -85,7 +85,7 @@ contract PixelNFT is ERC721URIStorage, Ownable, Colors {
 
     function getAllLinks() public view returns (string[] memory) {
         string[] memory result = new string[](totalColors);
-        for (uint id = 1; id < totalColors; id++) {
+        for (uint id = 0; id < totalColors; id++) {
             result[id] = getLink(id);
         }
         return result;
