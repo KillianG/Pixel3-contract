@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
 contract Colors {
-    mapping (uint256 => uint)  colors;
+    mapping (uint256 => string)  colors;
     mapping (uint256 => string)  links;
 }
 
@@ -22,7 +22,7 @@ contract PixelNFT is ERC721URIStorage, Ownable, Colors {
 
     constructor() public ERC721("PixelNFT", "PIX") {}
 
-    event colorChanged(uint newColor, uint256 tokenId);
+    event colorChanged(string newColor, uint256 tokenId);
     event linkChanged(string newLink, uint256 tokenId);
 
 
@@ -39,7 +39,7 @@ contract PixelNFT is ERC721URIStorage, Ownable, Colors {
         return newItemId;
     }
 
-    function changeColor(uint newColor, uint256 tokenId) public {
+    function changeColor(string memory newColor, uint256 tokenId) public {
         require(
             _isApprovedOrOwner(_msgSender(), tokenId),
             "ERC721: caller is not owner nor approved"
@@ -48,7 +48,7 @@ contract PixelNFT is ERC721URIStorage, Ownable, Colors {
         emit colorChanged(newColor, tokenId);
     }
 
-    function changeColorPack(uint[] memory newStats, uint256[] memory tokenIds) public {
+    function changeColorPack(string[] memory newStats, uint256[] memory tokenIds) public {
         require(newStats.length == tokenIds.length, "Error: list must be the same size");
         for (uint16 id = 0; id < tokenIds.length; id++) {
             require(
@@ -58,12 +58,12 @@ contract PixelNFT is ERC721URIStorage, Ownable, Colors {
         }
     }
 
-    function getColor(uint256 tokenId) public view returns (uint) {
+    function getColor(uint256 tokenId) public view returns (string memory) {
         return colors[tokenId];
     }
 
-    function getAllColor() public view returns (uint[] memory) {
-        uint[] memory result = new uint[](totalColors);
+    function getAllColor() public view returns (string[] memory) {
+        string[] memory result = new string[](totalColors);
         for (uint id = 1; id < totalColors; id++) {
             result[id] = getColor(id);
         }
