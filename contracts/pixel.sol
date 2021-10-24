@@ -10,7 +10,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 
 contract Colors {
-    mapping (uint256 => string)  colors;
+    mapping (uint256 => string[100])  colors;
     mapping (uint256 => string)  links;
 }
 
@@ -21,7 +21,8 @@ contract PixelNFT is ERC721Enumerable, Ownable, Colors {
 
     uint public totalColors;
     uint public pricePerMint = 0;
-    uint public maxAmountOfPixel = 10*10;
+    uint public parcelSize = 10*10;
+    uint public maxAmountOfPixel = (1000*1000)/(10*10);
 
     constructor() public ERC721("PixelNFT", "PIX") {}
 
@@ -30,14 +31,11 @@ contract PixelNFT is ERC721Enumerable, Ownable, Colors {
 
 
     function mintNFT(address recipient)
-        public payable returns (uint256)
+    public returns (uint256)
     {
-        //require(msg.value >= 0 wei, "Not enough BNB sent: check price.");
         uint256 newItemId = _tokenIds.current();
         _mint(recipient, newItemId);
         _tokenIds.increment();
-        totalColors++;
-
         return newItemId;
     }
 
@@ -58,31 +56,20 @@ contract PixelNFT is ERC721Enumerable, Ownable, Colors {
         return (values);
     }
 
-    function changeColor(string memory newColor, uint256 tokenId) public {
+    function changeColorPack(string[10*10] memory newStats, uint256 tokenId) public {
+        require(newStats.length == parcelSize, "Error: Colors size must be exact size of the parcel (10*10)");
         require(
             _isApprovedOrOwner(_msgSender(), tokenId),
-            "ERC721: caller is not owner nor approved"
-        );
-        colors[tokenId] = newColor;
-        emit colorChanged(newColor, tokenId);
-    }
-
-    function changeColorPack(string[] memory newStats, uint256[] memory tokenIds) public {
-        require(newStats.length == tokenIds.length, "Error: list must be the same size");
-        for (uint16 id = 0; id < tokenIds.length; id++) {
-            require(
-            _isApprovedOrOwner(_msgSender(), tokenIds[id]),
             "ERC721: caller is not owner nor approved");
-            changeColor(newStats[id], tokenIds[id]);
-        }
+        colors[tokenId] = newStats;
     }
 
-    function getColor(uint256 tokenId) public view returns (string memory) {
+    function getColor(uint256 tokenId) public view returns (string[10*10] memory) {
         return colors[tokenId];
     }
 
-    function getAllColors() public view returns (string[] memory) {
-        string[] memory result = new string[](totalColors);
+    function getAllColors() public view returns (string[100][] memory) {
+        string[100][] memory result;
         for (uint id = 0; id < totalColors; id++) {
             result[id] = getColor(id);
         }
