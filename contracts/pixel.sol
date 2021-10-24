@@ -70,7 +70,7 @@ contract PixelNFT is ERC721Enumerable, Ownable, Colors {
     }
 
     function getColorsPaginated(uint page) public view returns (string[100][10] memory) {
-        string[100][page] memory result;
+        string[100][10] memory result;
         for (uint id = page * 10; id < (page + 1) * 10 && id < totalColors; id++) {
             result[id] = getColor(id);
         }
