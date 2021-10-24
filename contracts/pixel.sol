@@ -19,7 +19,7 @@ contract PixelNFT is ERC721Enumerable, Ownable, Colors {
 
     Counters.Counter private _tokenIds;
 
-    uint public totalColors;
+    uint public totalColors = 0;
     uint public pricePerMint = 0;
     uint public parcelSize = 10*10;
     uint public maxAmountOfPixel = (1000*1000)/(10*10);
@@ -36,6 +36,7 @@ contract PixelNFT is ERC721Enumerable, Ownable, Colors {
         uint256 newItemId = _tokenIds.current();
         _mint(recipient, newItemId);
         _tokenIds.increment();
+        totalColors += 1;
         return newItemId;
     }
 
@@ -68,9 +69,9 @@ contract PixelNFT is ERC721Enumerable, Ownable, Colors {
         return colors[tokenId];
     }
 
-    function getAllColors() public view returns (string[100][] memory) {
-        string[100][] memory result;
-        for (uint id = 0; id < totalColors; id++) {
+    function getColorsPaginated(uint page) public view returns (string[100][10] memory) {
+        string[100][page] memory result;
+        for (uint id = page * 10; id < (page + 1) * 10 && id < totalColors; id++) {
             result[id] = getColor(id);
         }
         return result;
