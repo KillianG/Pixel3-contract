@@ -26,7 +26,7 @@ contract PixelNFT is ERC721Enumerable, Ownable, Colors {
 
     constructor() public ERC721("PixelNFT", "PIX") {}
 
-    event colorChanged(string newColor, uint256 tokenId);
+    event colorChanged(string[100] newColor, uint256 tokenId);
     event linkChanged(string newLink, uint256 tokenId);
 
 
@@ -48,7 +48,7 @@ contract PixelNFT is ERC721Enumerable, Ownable, Colors {
     function tokensOfOwnerBySize(
         address user
     ) public view returns (uint256[] memory) {
-        uint256 length = balanceOf(user);
+        uint256 length   = balanceOf(user);
 
         uint256[] memory values = new uint256[](length);
         for (uint256 i = 0; i < length; i++) {
@@ -63,6 +63,7 @@ contract PixelNFT is ERC721Enumerable, Ownable, Colors {
             _isApprovedOrOwner(_msgSender(), tokenId),
             "ERC721: caller is not owner nor approved");
         colors[tokenId] = newStats;
+        emit colorChanged(newStats, tokenId);
     }
 
     function getColor(uint256 tokenId) public view returns (string[10*10] memory) {
